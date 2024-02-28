@@ -32,7 +32,55 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* Custom Css */
+* {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  text-decoration: none !important;
+}
+h1{
+  background: #F9ED03;
+  background: linear-gradient(to right, #F9ED03 0%, #FB1916 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700 !important;
+}
+/* .f-fam-barlow {
+  font-family: "Barlow", sans-serif;
+} */
+ul>li{
+  transition: all ease-in-out 1s;
+  font-size: 18px;
+}
+ul>li:hover{
+  background: #F9ED03;
+  background: linear-gradient(to right, #F9ED03 0%, #FB1916 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  transition: all ease-in-out 1s;
+}
+
+.bg-theme {
+  background-color: #f2f6fa;
+}
+
+.bg-hunger {
+  background-color: #e7272d;
+}
+
+.border-rad-header {
+  border-radius: 0.75rem;
+}
+
+.border-rad-parent {
+  border-radius: 1rem;
 }
