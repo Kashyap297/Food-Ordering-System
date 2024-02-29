@@ -9,13 +9,19 @@ const Menu = () => {
   const [originalDishes, setOriginalDishes] = useState([]);
   const [searchDish, setSearchDish] = useState('')
   const [selectedType, setSelectedType] = useState('');
+  const [sortByPrice, setSortByPrice] = useState(false);
 
   const handleSearch = (e) => {
     setSearchDish(e.target.value)
   }
 
+  const handleSort = () => {
+    setSortByPrice(!sortByPrice);
+  }
+
   const handleFilterByType = (type) => {
     if (type === "All") {
+      setSelectedType(type);
       setDishes(originalDishes);
     } else {
       setSelectedType(type);
@@ -31,21 +37,29 @@ const Menu = () => {
       try {
         const querySnapshot = await getDocs(collection(db, "Food"));
         const allDishes = querySnapshot.docs.map((doc) => doc.data());
-      setOriginalDishes(allDishes);
+        setOriginalDishes(allDishes);
 
         const filteredDishes = selectedType === 'All'
-        ? allDishes
-        : querySnapshot.docs
-          .filter((doc) => doc.data().name.toLowerCase().includes(searchDish.toLowerCase()))
-          .filter((doc) => doc.data().type.toLowerCase().includes(selectedType.toLowerCase()))
-          .map((doc) => doc.data());
-      setDishes(filteredDishes);
+          ? allDishes
+          : querySnapshot.docs
+            .filter((doc) => doc.data().name.toLowerCase().includes(searchDish.toLowerCase()))
+            .filter((doc) => doc.data().type.toLowerCase().includes(selectedType.toLowerCase()))
+            .map((doc) => doc.data());
+
+            let sortedDishes = selectedType === 'All'
+            ? allDishes
+            : filteredDishes;
+  
+          if (sortByPrice) {
+            sortedDishes = sortedDishes.sort((a, b) => a.price - b.price);
+          }
+        setDishes(sortedDishes);
       } catch (error) {
         console.error('Error fetching dishes:', error);
       }
     };
     fetchData()
-  }, [searchDish, setDishes, selectedType])
+  }, [searchDish, setDishes, selectedType, sortByPrice])
 
 
 
@@ -58,7 +72,7 @@ const Menu = () => {
             <input type="text" className='form-control w-25' placeholder='Search Dish...' value={searchDish} onChange={handleSearch} />
             <div className="sortbyname">
               <div className="d-flex align-items-center justify-content-Evenly gap-2">
-              <button className={`btn btn-outline-danger ${selectedType === 'All' ? 'active' : ''}`} onClick={() => handleFilterByType('All')}>
+                <button className={`btn btn-outline-danger ${selectedType === 'All' ? 'active' : ''}`} onClick={() => handleFilterByType('All')}>
                   All
                 </button>
                 <button className={`btn btn-outline-danger ${selectedType === 'Combo' ? 'active' : ''}`} onClick={() => handleFilterByType('Combo')}>
@@ -74,12 +88,12 @@ const Menu = () => {
                   Chicken
                 </button>
                 <button className={`btn btn-outline-danger ${selectedType === 'Fries' ? 'active' : ''}`} onClick={() => handleFilterByType('Fries')}>
-                Fries
+                  Fries
                 </button>
                 <button className={`btn btn-outline-danger ${selectedType === 'Beverages' ? 'active' : ''}`} onClick={() => handleFilterByType('Beverages')}>
-                Beverages
+                  Beverages
                 </button>
-                <button className='btn btn-success'>Sort Price</button>
+                <button className='btn btn-success' onClick={handleSort}>Sort Price</button>
               </div>
             </div>
           </div>
