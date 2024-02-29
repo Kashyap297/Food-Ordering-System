@@ -10,6 +10,15 @@ const Menu = () => {
   const [searchDish, setSearchDish] = useState('')
   const [selectedType, setSelectedType] = useState('');
   const [sortByPrice, setSortByPrice] = useState(false);
+  const [noRecord, setNoRecord] = useState(false)
+
+  useEffect(() => {
+    if (dishes.length === 0) {
+      setNoRecord(true)
+    } else {
+      setNoRecord(false)
+    }
+  }, [dishes])
 
   const handleSearch = (e) => {
     setSearchDish(e.target.value)
@@ -46,13 +55,13 @@ const Menu = () => {
             .filter((doc) => doc.data().type.toLowerCase().includes(selectedType.toLowerCase()))
             .map((doc) => doc.data());
 
-            let sortedDishes = selectedType === 'All'
-            ? allDishes
-            : filteredDishes;
-  
-          if (sortByPrice) {
-            sortedDishes = sortedDishes.sort((a, b) => a.price - b.price);
-          }
+        let sortedDishes = selectedType === 'All'
+          ? allDishes
+          : filteredDishes;
+
+        if (sortByPrice) {
+          sortedDishes = sortedDishes.sort((a, b) => a.price - b.price);
+        }
         setDishes(sortedDishes);
       } catch (error) {
         console.error('Error fetching dishes:', error);
@@ -101,30 +110,32 @@ const Menu = () => {
         <div className="menu mt-5 mx-5">
           <div className="row">
             {
-              dishes.map((dish, id) => {
-                return (
-                  <div className="col-3 my-2" key={id}>
-                    <div className="card-menu bg-theme border-rad-parent p-3">
-                      <div className="card-img border-rad-parent">
-                        <img src={dish.img} alt="" className='img-fluid border-rad-parent' />
-                      </div>
-                      <h4 className='badge bg-dark align-self-start m-0 text-capitalize'>{dish.type}</h4>
-                      <div className="d-flex align-items-center justify-content-between mt-3 mb-2">
-                        <h4 className='text-danger m-0'>{dish.name}</h4>
-                      </div>
-                      <p className='text-justify'>{dish.description}</p>
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div className="price">
-                          <span className='fw-bolder fs-5'>Rs {dish.price}/-</span>
+              // noRecord ? <h1 className='text-center text-danger'>No matching dishes found</h1> :
+                dishes.map((dish, id) => {
+                  return (
+                    noRecord ? <h1>No Data</h1> :
+                      <div className="col-3 my-2" key={id}>
+                        <div className="card-menu bg-theme border-rad-parent p-3">
+                          <div className="card-img border-rad-parent">
+                            <img src={dish.img} alt="" className='img-fluid border-rad-parent' />
+                          </div>
+                          <h4 className='badge bg-dark align-self-start m-0 text-capitalize'>{dish.type}</h4>
+                          <div className="d-flex align-items-center justify-content-between mt-3 mb-2">
+                            <h4 className='text-danger m-0'>{dish.name}</h4>
+                          </div>
+                          <p className='text-justify'>{dish.description}</p>
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div className="price">
+                              <span className='fw-bolder fs-5'>Rs {dish.price}/-</span>
+                            </div>
+                            <div className="cart-btn">
+                              <button className='btn btn-outline-dark'>Add to Platter</button>
+                            </div>
+                          </div>
                         </div>
-                        <div className="cart-btn">
-                          <button className='btn btn-outline-dark'>Add to Platter</button>
-                        </div>
                       </div>
-                    </div>
-                  </div>
-                )
-              })
+                  )
+                })
             }
           </div>
         </div>
