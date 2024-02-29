@@ -41,11 +41,14 @@
 
 /* Custom Css */
 * {
-  margin: 0 !important;
-  padding: 0 !important;
   list-style: none !important;
   text-decoration: none !important;
+  font-family: "Rubik", sans-serif;
 }
+body{
+  background-color: #f2f6fa !important;
+}
+
 h1{
   background: #F9ED03;
   background: linear-gradient(to right, #F9ED03 0%, #FB1916 50%);
@@ -57,7 +60,7 @@ h1{
   font-family: "Barlow", sans-serif;
 } */
 ul>li{
-  transition: all ease-in-out 1s;
+  transition: all ease-in-out 1s !important;
   font-size: 18px;
 }
 ul>li:hover{
@@ -66,7 +69,7 @@ ul>li:hover{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
-  transition: all ease-in-out 1s;
+  transition: all ease-in-out 1s !important;
 }
 
 .bg-theme {
@@ -83,4 +86,123 @@ ul>li:hover{
 
 .border-rad-parent {
   border-radius: 1rem;
+}
+
+/* form-control */
+.form-control:focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border-color: #778899 !important;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(119,136,153, 0.25)!important;
+}
+/* custom css */
+
+.bor-rad {
+  border-radius: 18px;
+}
+
+.bor-r {
+  border-radius: 24px;
+}
+
+.pad-sm {
+  padding: 10px !important;
+}
+
+.border-1 {
+  border: 1px solid #777;
+}
+
+.clr-gr {
+  color: #494949;
+}
+
+.font-sz {
+  font-size: 13px;
+}
+
+/* old */
+.text-justify {
+  text-align: justify;
+}
+
+.gr-text {
+  color: #babfc2 !important;
+}
+
+.form-group {
+  position: relative;
+  /* margin-bottom: 20px; */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid lightslategrey;
+  border-radius: 16px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group label {
+  position: absolute;
+  left: 24px;
+  top: 12px;
+  font-size: 16px;
+  color: #777;
+  transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #212529;
+  outline: none;
+}
+
+.form-group input:focus label {
+  color: #212529 !important;
+}
+
+.form-group input:focus+label,
+.form-group input+label {
+  top: -10px;
+  font-size: 14px;
+  color: lightslategray;
+  background-color: #ffffff;
+  padding: 0 4px;
+  border-radius: 4px;
+  left: 20px;
+}
+
+.button {
+  background-color: #212529;
+  color: white;
+  transition: all 0.1s ease-in-out;
+  font-size: 18px !important;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 14px;
+}
+
+.button:active {
+  background-color: white;
+  color: #212529;
+  border: 1px solid #212529;
+  transition: all 0.1s ease-in-out;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pyy-2 {
+  padding: 12px 14px !important;
+  border: 1px solid lightslategrey;
+  color: #777;
+}
+
+.vh-80{
+  height: 80vh;
 }
