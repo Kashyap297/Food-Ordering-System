@@ -36,7 +36,7 @@ const Header = () => {
                 <div className="bg-white border px-3 py-3 border-rad-header ">
                     <div className="f-fam-barlow d-flex align-items-center justify-content-between">
                         <div className="logo">
-                            <h1 className='m-0'>Kashkan</h1>
+                            <h1 className='m-0'>BurgerKing</h1>
                         </div>
                         <ul className='d-flex align-items-center justify-content-between m-0 gap-5'>
                             <li><Link to={"/"} className='fw-bold text-secondary'>Home</Link></li>

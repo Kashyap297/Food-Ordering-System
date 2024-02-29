@@ -59,7 +59,7 @@ h1{
 
 .title{
   background: #F9ED03;
-  background: linear-gradient(to right, #F9ED03 0%, #FB1916 68%);
+  background: linear-gradient(to right, #F9ED03 20%, #FB1916 68%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700 !important;
