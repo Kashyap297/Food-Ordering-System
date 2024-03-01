@@ -29,8 +29,8 @@ const Menu = () => {
   }
 
   const handleFilterByType = (type) => {
+    setSelectedType(type);
     if (type === "All") {
-      setSelectedType(type);
       setDishes(originalDishes);
     } else {
       setSelectedType(type);
@@ -47,26 +47,31 @@ const Menu = () => {
         const querySnapshot = await getDocs(collection(db, "Food"));
         const allDishes = querySnapshot.docs.map((doc) => doc.data());
         setOriginalDishes(allDishes);
-
-        const filteredDishes = selectedType === 'All'
-          ? allDishes
-          : querySnapshot.docs
-            .filter((doc) => doc.data().name.toLowerCase().includes(searchDish.toLowerCase()))
-            .filter((doc) => doc.data().type.toLowerCase().includes(selectedType.toLowerCase()))
-            .map((doc) => doc.data());
-
-        let sortedDishes = selectedType === 'All'
-          ? allDishes
-          : filteredDishes;
-
+  
+        let filteredDishes = allDishes;
+  
+        if (selectedType !== 'All') {
+          filteredDishes = allDishes.filter((dish) =>
+            dish.type.toLowerCase().includes(selectedType.toLowerCase())
+          );
+        }
+  
+        filteredDishes = filteredDishes.filter((dish) =>
+          dish.name.toLowerCase().includes(searchDish.toLowerCase())
+        );
+  
+        let sortedDishes = [...filteredDishes];
+  
         if (sortByPrice) {
           sortedDishes = sortedDishes.sort((a, b) => a.price - b.price);
         }
+  
         setDishes(sortedDishes);
       } catch (error) {
         console.error('Error fetching dishes:', error);
       }
     };
+  
     fetchData()
   }, [searchDish, setDishes, selectedType, sortByPrice])
 
