@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { collection, getDoc, getDocs, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ const Menu = () => {
   const { dishes, setDishes } = useContext(authData)
   const { logedUser, cart, setCart } = useContext(authData)
   const { login, setLogin } = useContext(authData)
+  const {userUID, setUserUID} = useContext(authData)
   const [originalDishes, setOriginalDishes] = useState([]);
   const [searchDish, setSearchDish] = useState('')
   const [selectedType, setSelectedType] = useState('');
@@ -96,9 +97,16 @@ const Menu = () => {
           // If the item is not in the cart, add a new item
           newCart.push({ ...selectedDish, quantity: 1 });
         }
+
+        // Update cart data in Firestore
+
+        console.log(userUID);
+        const userCartRef = doc(db, 'carts', userUID); // 'carts' is the collection name
+        updateDoc(userCartRef, { cart: newCart });
+
         return newCart
       });
-      // You can also add a firestore update here to save the cart data to the user's document if needed
+      
     } else {
       Swal.fire({
         title: "Please Login !",

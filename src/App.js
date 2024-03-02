@@ -18,22 +18,25 @@ function App() {
   const [users, setUsers] = useState([])
   const [login, setLogin] = useState(false)
   const [logedUser, setLogedUser] = useState(null)
+  const [userUID, setUserUID] = useState(null)
   const [dishes, setDishes] = useState([])
   const [cart, setCart] = useState([])
-
   const auth = getAuth(app)
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setLogin(true)
+        setUserUID(user.uid);
         // console.log(user);
         // console.log(user.uid);
       } else {
         setLogin(false);
-        // setLogedUser(null);
+        setUserUID(null);
       }
     })
   }, [])
+
+  // console.log(userUID);
 
   // fetch menu
   useEffect(()=>{
@@ -54,7 +57,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <authData.Provider value={{ users, setUsers, login, setLogin, logedUser, setLogedUser, dishes, setDishes, cart, setCart }}>
+        <authData.Provider value={{ users, setUsers, login, setLogin, logedUser, setLogedUser, dishes, setDishes, cart, setCart, userUID , setUserUID}}>
           <Header />
           <Routes>
             <Route path='/' element={< Home />} />

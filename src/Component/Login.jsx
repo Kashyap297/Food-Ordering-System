@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { authData } from '../App';
-import { app } from '../firebase';
+import { app, db } from '../firebase';
 import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2'
+import { addDoc, collection } from 'firebase/firestore';
 
 const Login = () => {
 
@@ -69,12 +70,6 @@ const Login = () => {
         signInWithEmailAndPassword(auth, input.email, input.password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                // console.log(user.uid);
-                // console.log(user.email);
-                setLogedUser({
-                    email: user.uid, id: user.id
-                })
-                console.log(logedUser);
                 Swal.fire({
                     title: "Login Successfully !",
                     text: "Visit our home page...",
@@ -88,8 +83,8 @@ const Login = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorMessage);
-                console.log(errorCode);
+                // console.log(errorMessage);
+                // console.log(errorCode);
                 Swal.fire({
                     title: "Invalid User Or Password  !",
                     text: "Try Again",
