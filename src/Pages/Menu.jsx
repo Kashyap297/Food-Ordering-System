@@ -82,30 +82,34 @@ const Menu = () => {
     };
 
     fetchData()
-  }, [searchDish, setDishes, selectedType, sortByPrice, setCart])
+  }, [searchDish, setDishes, selectedType, sortByPrice])
 
 
   const handleAddToCart = async (selectedDish) => {
     console.log(selectedDish);
     if (login) {
       // If user is logged in, update the cart
-      const newCart = [...cart];
+      try {
+        const newCart = [...cart];
 
-      console.log(selectedDish.unique);
-      const existingItemIndex = newCart.findIndex((item) => item.id === selectedDish.unique);
-      console.log(existingItemIndex);
+        console.log(selectedDish.unique);
+        const existingItemIndex = newCart.findIndex((item) => item.unique === selectedDish.unique);
+        console.log(existingItemIndex);
 
-      if (existingItemIndex !== -1) {
-        // If the item already exists in the cart, update its quantity
-        newCart[existingItemIndex].quantity += 1;
-      } else {
-        // If the item is not in the cart, add a new item
-        newCart.push({ ...selectedDish, quantity: 1 });
+        if (existingItemIndex !== -1) {
+          // If the item already exists in the cart, update its quantity
+          newCart[existingItemIndex].quantity += 1;
+        } else {
+          // If the item is not in the cart, add a new item
+          newCart.push({ ...selectedDish, quantity: 1 });
+        }
+
+        const userCartRef = doc(db, 'carts', userUID);
+        await setDoc(userCartRef, { cart: newCart }, { merge: true });
+        setCart(newCart)
+      } catch (error) {
+        console.error('error Updating cart : ', error)
       }
-
-      const userCartRef = doc(db, 'carts', userUID);
-      await setDoc(userCartRef, { cart: newCart }, { merge: true });
-      setCart(newCart)
 
     } else {
       Swal.fire({
@@ -117,7 +121,6 @@ const Menu = () => {
       });
       navigate('/login')
     }
-
   };
   return (
     <>
