@@ -19,6 +19,7 @@ function App() {
   const [login, setLogin] = useState(false)
   const [logedUser, setLogedUser] = useState(null)
   const [dishes, setDishes] = useState([])
+  const [cart, setCart] = useState([])
 
   const auth = getAuth(app)
   useEffect(() => {
@@ -53,7 +54,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <authData.Provider value={{ users, setUsers, login, setLogin, logedUser, setLogedUser, dishes, setDishes }}>
+        <authData.Provider value={{ users, setUsers, login, setLogin, logedUser, setLogedUser, dishes, setDishes, cart, setCart }}>
           <Header />
           <Routes>
             <Route path='/' element={< Home />} />
