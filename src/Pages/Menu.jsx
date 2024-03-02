@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 
@@ -104,7 +104,7 @@ const Menu = () => {
       }
 
       const userCartRef = doc(db, 'carts', userUID);
-      setDoc(userCartRef, { cart: newCart }, { merge: true });
+      await setDoc(userCartRef, { cart: newCart }, { merge: true });
       setCart(newCart)
 
     } else {
@@ -119,9 +119,6 @@ const Menu = () => {
     }
 
   };
-
-  
-
   return (
     <>
       <section className='menu-section my-4 py-5 bg-white mx-4 border-rad-parent'>

@@ -9,16 +9,20 @@ const Cart = () => {
     const [noRecord, setNoRecord] = useState(false)
     const { cart, setCart, userUID } = useContext(authData);
     const [totalAmount, setTotalAmount] = useState(0)
+    const [totalProducts, setTotalProducts] = useState(0);;
 
     useEffect(() => {
         if (cart.length === 0) {
             setNoRecord(true)
             setTotalAmount(0)
-
+            setTotalProducts(0);
         } else {
             setNoRecord(false)
             const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0)
             setTotalAmount(total)
+            
+            const uniqueProducts = Array.from(new Set(cart.map(item => item.id))).length;
+            setTotalProducts(uniqueProducts);
         }
     }, [cart])
 
@@ -169,7 +173,8 @@ const Cart = () => {
                         </div>
                         <div className="col-4">
                             <div className="cart-billing bg-theme px-5 py-4 border-rad-header">
-                                <h3 className='text-center border-bottom pb-2  m-0 clr-gr title'>Order-Summary</h3>
+                                <h3 className='text-center border-bottom pb-2  m-0 clr-gr title'>Order-Summary </h3>
+                                <p className='text-secondary text-end mt-3'>({totalProducts} {totalProducts === 1 ? 'product' : 'products'})</p>
                                 <div className="bill mt-3 px-3 border-bottom pb-3">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <span className='fs-5 fw-bold clr-gr'>Sub-Total</span>
