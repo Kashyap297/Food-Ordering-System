@@ -69,6 +69,12 @@ const Login = () => {
         signInWithEmailAndPassword(auth, input.email, input.password)
             .then((userCredential) => {
                 const user = userCredential.user;
+                // console.log(user.uid);
+                // console.log(user.email);
+                setLogedUser({
+                    email: user.uid, id: user.id
+                })
+                console.log(logedUser);
                 Swal.fire({
                     title: "Login Successfully !",
                     text: "Visit our home page...",
@@ -106,7 +112,7 @@ const Login = () => {
                     timer: 1700
                 });
                 setLogin(true)
-                setLogedUser(result.user.displayName)
+                // setLogedUser(result.user.displayName)
                 navigate('/')
             }).catch((error) => {
                 console.log(error);

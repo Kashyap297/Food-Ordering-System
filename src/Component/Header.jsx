@@ -12,7 +12,7 @@ const Header = () => {
     // console.log(login);
     const { logedUser, setLogedUser } = useContext(authData)
     const navigate = useNavigate()
-
+    // console.log(logedUser);
     const handleLogOut = () => {
         signOut(auth)
             .then(() => {
@@ -25,6 +25,7 @@ const Header = () => {
                 });
                 setLogin(false)
                 setLogedUser(null)
+                navigate('/')
             }).catch((err) => {
                 console.log(err);
             })
@@ -49,8 +50,8 @@ const Header = () => {
                                     <Link to={"/login"} className='btn btn-outline-danger me-3 px-3 py-2 fw-bolder'>Login</Link>
                                     <Link to={"/signup"} className='btn btn-outline-success px-3 py-2 fw-bolder'>SignUp</Link>
                                 </>
-                                :
-                                <li className='btn btn-outline-dark ' onClick={handleLogOut}>LogOut</li>
+                                    :
+                                    <li className='btn btn-outline-dark ' onClick={handleLogOut}>LogOut</li>
                             }
                         </div>
                     </div>

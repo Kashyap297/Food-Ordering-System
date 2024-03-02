@@ -1,19 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { collection, getDocs, where } from 'firebase/firestore';
+import { collection, getDoc, getDocs, setDoc, where } from 'firebase/firestore';
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
+
 
 const Menu = () => {
 
   const { dishes, setDishes } = useContext(authData)
-  const { cart, setCart } = useContext(authData)
-  const {login, setLogin} = useContext(authData)
+  const { logedUser, cart, setCart } = useContext(authData)
+  const { login, setLogin } = useContext(authData)
   const [originalDishes, setOriginalDishes] = useState([]);
   const [searchDish, setSearchDish] = useState('')
   const [selectedType, setSelectedType] = useState('');
   const [sortByPrice, setSortByPrice] = useState(false);
   const [noRecord, setNoRecord] = useState(false)
-   
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (dishes.length === 0) {
       setNoRecord(true)
@@ -78,7 +82,7 @@ const Menu = () => {
   }, [searchDish, setDishes, selectedType, sortByPrice])
 
 
-  const handleAddToCart = async(selectedDish) => {
+  const handleAddToCart = async (selectedDish) => {
     if (login) {
       // If user is logged in, update the cart
       setCart((prevCart) => {
@@ -92,17 +96,21 @@ const Menu = () => {
           // If the item is not in the cart, add a new item
           newCart.push({ ...selectedDish, quantity: 1 });
         }
-        return newCart;
+        return newCart
       });
       // You can also add a firestore update here to save the cart data to the user's document if needed
     } else {
-      // If user is not logged in, show an alert or redirect to the login page
-      alert('Please login to add items to the cart.');
-      // Alternatively, you can redirect to the login page using React Router
-      // history.push('/login');
+      Swal.fire({
+        title: "Please Login !",
+        text: "Login To Add to Platter",
+        icon: "info",
+        showConfirmButton: false,
+        timer: 2100
+      });
+      navigate('/login')
     }
   };
-     console.log(cart);
+
   return (
     <>
       <section className='menu-section my-4 py-5 bg-white mx-4 border-rad-parent'>
@@ -150,9 +158,9 @@ const Menu = () => {
                         <div className="card-img border-rad-parent">
                           <img src={dish.img} alt="" className='img-fluid border-rad-parent' />
                         </div>
-                        <h4 className='badge bg-dark align-self-start m-0 text-capitalize'>{dish.type}</h4>
                         <div className="d-flex align-items-center justify-content-between mt-3 mb-2">
                           <h4 className='text-danger m-0'>{dish.name}</h4>
+                          <h4 className='badge bg-dark align-self-start m-0 text-capitalize'>{dish.type}</h4>
                         </div>
                         <p className='text-justify'>{dish.description}</p>
                         <div className="d-flex align-items-center justify-content-between">

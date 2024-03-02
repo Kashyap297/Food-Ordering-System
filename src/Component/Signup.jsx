@@ -104,7 +104,7 @@ const Signup = () => {
                     timer: 1700
                 });
                 setLogin(true)
-                setLogedUser(result.user.displayName)
+                // setLogedUser(result.user.displayName)
                 navigate('/')
             }).catch((err) => {
                 console.log(err);
