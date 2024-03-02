@@ -10,11 +10,9 @@ const Header = () => {
     const auth = getAuth(app)
     const { login, setLogin } = useContext(authData)
     // console.log(login);
-    const { logedUser, setLogedUser } = useContext(authData)
     const { userUID, setUserUID } = useContext(authData)
 
     const navigate = useNavigate()
-    // console.log(logedUser);
     const handleLogOut = () => {
         signOut(auth)
             .then(() => {
@@ -27,7 +25,6 @@ const Header = () => {
                 });
                 setLogin(false)
                 setUserUID(null)
-                // setLogedUser(null)
                 navigate('/')
             }).catch((err) => {
                 console.log(err);

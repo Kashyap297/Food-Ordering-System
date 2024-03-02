@@ -12,7 +12,6 @@ const Signup = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app)
     const { login, setLogin } = useContext(authData)
-    const { logedUser, setLogedUser } = useContext(authData)
 
     // const { users, setUsers } = useContext(authData)
     const [input, setInput] = useState({ email: '', password: '' })
@@ -104,7 +103,6 @@ const Signup = () => {
                     timer: 1700
                 });
                 setLogin(true)
-                // setLogedUser(result.user.displayName)
                 navigate('/')
             }).catch((err) => {
                 console.log(err);

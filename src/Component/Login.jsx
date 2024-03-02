@@ -14,7 +14,6 @@ const Login = () => {
     const auth = getAuth(app)
 
     const { login, setLogin } = useContext(authData)
-    const { logedUser, setLogedUser } = useContext(authData)
 
     const navigate = useNavigate()
     const [input, setInput] = useState({ email: '', password: '' })
@@ -107,7 +106,6 @@ const Login = () => {
                     timer: 1700
                 });
                 setLogin(true)
-                // setLogedUser(result.user.displayName)
                 navigate('/')
             }).catch((error) => {
                 console.log(error);

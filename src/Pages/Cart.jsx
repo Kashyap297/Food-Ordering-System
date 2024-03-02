@@ -1,20 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App'
 import bin from '../icon/bin.png'
-import { doc, getDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 
 const Cart = () => {
 
     const [noRecord, setNoRecord] = useState(false)
-    // const { cart, setCart } = useContext(authData)
     const { cart, setCart, userUID } = useContext(authData);
+    const [totalAmount, setTotalAmount] = useState(0)
 
-    useEffect(()=>{
-        if(cart.length === 0){
+    useEffect(() => {
+        if (cart.length === 0) {
             setNoRecord(true)
-        }else{
+            setTotalAmount(0)
+
+        } else {
             setNoRecord(false)
+            const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0)
+            setTotalAmount(total)
         }
     }, [cart])
 
@@ -26,14 +30,11 @@ const Cart = () => {
                     const cartDoc = await getDoc(userCartRef);
 
                     if (cartDoc.exists()) {
-                        // If the document exists, update the cart state
                         setCart(cartDoc.data().cart || []);
                     } else {
-                        // If the document doesn't exist, set cart state to an empty array
                         setCart([]);
                     }
                 } else {
-                    // If userUID is not available, set cart state to an empty array
                     setCart([]);
                 }
             } catch (error) {
@@ -44,14 +45,60 @@ const Cart = () => {
         fetchCartData();
     }, [userUID, setCart]);
 
-    const handleDecrement = () => {
+    const handleDecrement = async (productId) => {
+        try {
+            if (userUID) {
+                const userCartRef = doc(db, 'carts', userUID);
+    
+                const currentQuantity = cart[productId].quantity;
+                if (currentQuantity > 1) {
+                    await updateDoc(userCartRef, {
+                        cart: arrayUnion({ ...cart[productId], quantity: currentQuantity - 1 }),
+                    });
 
-    }
-    const handleIncrement = () => {
+                    const updatedCart = [...cart];
+                    updatedCart[productId].quantity -= 1;
+    
+                    setCart(updatedCart);
+                }
+            }
+        } catch (error) {
+            console.error('Error decrementing quantity in cart:', error);
+        }
+    };
 
-    }
-    const handleDelete = () => {
+    const handleIncrement = async (productId) => {
+        // console.log(productId);
+        try {
+            if (userUID) {
+                const userCartRef = doc(db, 'carts', userUID);
+                await updateDoc(userCartRef, {
+                    cart: arrayUnion({ ...cart[productId], quantity: cart[productId].quantity + 1 }),
+                });
+                const updatedCart = [...cart];
+                updatedCart[productId].quantity += 1;
 
+                setCart(updatedCart);
+            }
+        } catch (error) {
+            console.error('Error incrementing quantity in cart:', error);
+        }
+    };
+
+    const handleDelete = async (productId) => {
+        try {
+            if (userUID) {
+                const userCartRef = doc(db, 'carts', userUID);
+                await updateDoc(userCartRef, {
+                    cart: arrayRemove(cart[productId]),
+                });
+                const updatedCart = [...cart];
+                updatedCart.splice(productId, 1);
+                setCart(updatedCart);
+            }
+        } catch (error) {
+            console.error('Error deleting product from cart:', error);
+        }
     }
 
     return (
@@ -84,9 +131,10 @@ const Cart = () => {
                                                 </>
                                             ) : (
 
-                                                cart.map((item, id) => {
+                                                cart.map((item, index) => {
+                                                    // console.log(item);
                                                     return (
-                                                        <tr key={id}>
+                                                        <tr key={index}>
                                                             <td className='d-flex justify-content-between align-items-center py-3'>
                                                                 <div className="pro-img me-3">
                                                                     <img src={item.img} alt="" className='image-fluid bor-rad' />
@@ -99,14 +147,14 @@ const Cart = () => {
                                                             <td className=''>{item.price}/-</td>
                                                             <td className=''>
                                                                 <div className="quantity-field" >
-                                                                    <button className="value-button decrease-button" onClick={() => handleDecrement(item.id)}>-</button>
+                                                                    <button className="value-button decrease-button" onClick={() => handleDecrement(index)}>-</button>
                                                                     <div className="number">{item.quantity}</div>
-                                                                    <button className="value-button increase-button" onClick={() => handleIncrement(item.id)}>+</button>
+                                                                    <button className="value-button increase-button" onClick={() => handleIncrement(index)}>+</button>
                                                                 </div>
                                                             </td>
                                                             <td className=''>{item.quantity * item.price}/-</td>
                                                             <td className=''>
-                                                                <button className="btn btn-light" onClick={() => handleDelete(id)}>
+                                                                <button className="btn btn-light" onClick={() => handleDelete(index)}>
                                                                     <img src={bin} alt="" width="24px" />
                                                                 </button></td>
                                                         </tr>
@@ -120,12 +168,12 @@ const Cart = () => {
                             </div>
                         </div>
                         <div className="col-4">
-                            <div className="cart-billing bg-theme p-5 border-rad-header">
-                                <h3 className='text-center border-bottom pb-2 clr-gr'>Summary</h3>
+                            <div className="cart-billing bg-theme px-5 py-4 border-rad-header">
+                                <h3 className='text-center border-bottom pb-2  m-0 clr-gr title'>Order-Summary</h3>
                                 <div className="bill mt-3 px-3 border-bottom pb-3">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <span className='fs-5 fw-bold clr-gr'>Sub-Total</span>
-                                        <span className='fs-5'>1000/-</span>
+                                        <span className='fs-5'>{totalAmount}/-</span>
                                     </div>
                                     <div className="d-flex justify-content-between align-items-center mt-3">
                                         <span className='fs-5 fw-bold clr-gr'>Delivery Charges</span>
@@ -134,7 +182,7 @@ const Cart = () => {
                                 </div>
                                 <div className="d-flex justify-content-between align-items-center mt-3 px-3 border-bottom pb-3">
                                     <span className='fs-5 fw-bold clr-gr'>Grand Total</span>
-                                    <span className='fs-4 fw-bold'> 1000/-</span>
+                                    <span className='fs-4 fw-bold'>{totalAmount}/- </span>
                                 </div>
                             </div>
                         </div>

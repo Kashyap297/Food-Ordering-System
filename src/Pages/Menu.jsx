@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Menu = () => {
 
   const { dishes, setDishes } = useContext(authData)
-  const { logedUser, cart, setCart } = useContext(authData)
+  const { cart, setCart } = useContext(authData)
   const { login, setLogin } = useContext(authData)
   const { userUID, setUserUID } = useContext(authData)
   const [originalDishes, setOriginalDishes] = useState([]);
@@ -82,7 +82,7 @@ const Menu = () => {
     };
 
     fetchData()
-  }, [searchDish, setDishes, selectedType, sortByPrice])
+  }, [searchDish, setDishes, selectedType, sortByPrice, setCart])
 
 
   const handleAddToCart = async (selectedDish) => {
@@ -119,6 +119,8 @@ const Menu = () => {
     }
 
   };
+
+  
 
   return (
     <>
