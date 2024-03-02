@@ -177,7 +177,7 @@ const Cart = () => {
                                 <p className='text-secondary text-end mt-3'>({totalProducts} {totalProducts === 1 ? 'product' : 'products'})</p>
                                 <div className="bill mt-3 px-3 border-bottom pb-3">
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <span className='fs-5 fw-bold clr-gr'>Sub-Total haha</span>
+                                        <span className='fs-5 fw-bold clr-gr'>Sub-Total</span>
                                         <span className='fs-5'>{totalAmount}/-</span>
                                     </div>
                                     <div className="d-flex justify-content-between align-items-center mt-3">
