@@ -49,10 +49,12 @@ function App() {
     var list = []
     querySnapshot.forEach((doc) => {
       var data = doc.data()
-      list.push({id: doc.id, ...data})
+      list.push({unique: doc.id, ...data})
     });
     setDishes(list)
   }
+
+
 
   return (
     <>

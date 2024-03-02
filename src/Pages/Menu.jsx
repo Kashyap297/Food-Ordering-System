@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 
@@ -11,13 +11,15 @@ const Menu = () => {
   const { dishes, setDishes } = useContext(authData)
   const { logedUser, cart, setCart } = useContext(authData)
   const { login, setLogin } = useContext(authData)
-  const {userUID, setUserUID} = useContext(authData)
+  const { userUID, setUserUID } = useContext(authData)
   const [originalDishes, setOriginalDishes] = useState([]);
   const [searchDish, setSearchDish] = useState('')
   const [selectedType, setSelectedType] = useState('');
   const [sortByPrice, setSortByPrice] = useState(false);
   const [noRecord, setNoRecord] = useState(false)
   const navigate = useNavigate()
+
+  // console.log(dishes);
 
   useEffect(() => {
     if (dishes.length === 0) {
@@ -84,29 +86,27 @@ const Menu = () => {
 
 
   const handleAddToCart = async (selectedDish) => {
+    console.log(selectedDish);
     if (login) {
       // If user is logged in, update the cart
-      setCart((prevCart) => {
-        const newCart = [...prevCart];
-        const existingItemIndex = newCart.findIndex((item) => item.id === selectedDish.id);
+      const newCart = [...cart];
 
-        if (existingItemIndex !== -1) {
-          // If the item already exists in the cart, update its quantity
-          newCart[existingItemIndex].quantity += 1;
-        } else {
-          // If the item is not in the cart, add a new item
-          newCart.push({ ...selectedDish, quantity: 1 });
-        }
+      console.log(selectedDish.unique);
+      const existingItemIndex = newCart.findIndex((item) => item.id === selectedDish.unique);
+      console.log(existingItemIndex);
 
-        // Update cart data in Firestore
+      if (existingItemIndex !== -1) {
+        // If the item already exists in the cart, update its quantity
+        newCart[existingItemIndex].quantity += 1;
+      } else {
+        // If the item is not in the cart, add a new item
+        newCart.push({ ...selectedDish, quantity: 1 });
+      }
 
-        console.log(userUID);
-        const userCartRef = doc(db, 'carts', userUID); // 'carts' is the collection name
-        updateDoc(userCartRef, { cart: newCart });
+      const userCartRef = doc(db, 'carts', userUID);
+      setDoc(userCartRef, { cart: newCart }, { merge: true });
+      setCart(newCart)
 
-        return newCart
-      });
-      
     } else {
       Swal.fire({
         title: "Please Login !",
@@ -117,6 +117,7 @@ const Menu = () => {
       });
       navigate('/login')
     }
+
   };
 
   return (
@@ -158,10 +159,10 @@ const Menu = () => {
           <div className="row">
             {
               // noRecord ? <h1 className='text-center text-danger'>No matching dishes found</h1> :
-              dishes.map((dish, id) => {
+              dishes.map((dish, index) => {
                 return (
-                  noRecord ? <h1 key={id}>No Data</h1> :
-                    <div className="col-3 my-2" key={id}>
+                  noRecord ? <h1 key={index}>No Data</h1> :
+                    <div className="col-3 my-2" key={index}>
                       <div className="card-menu bg-theme border-rad-parent p-3">
                         <div className="card-img border-rad-parent">
                           <img src={dish.img} alt="" className='img-fluid border-rad-parent' />

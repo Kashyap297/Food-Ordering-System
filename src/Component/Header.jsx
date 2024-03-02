@@ -11,6 +11,8 @@ const Header = () => {
     const { login, setLogin } = useContext(authData)
     // console.log(login);
     const { logedUser, setLogedUser } = useContext(authData)
+    const { userUID, setUserUID } = useContext(authData)
+
     const navigate = useNavigate()
     // console.log(logedUser);
     const handleLogOut = () => {
@@ -24,7 +26,8 @@ const Header = () => {
                     timer: 1700
                 });
                 setLogin(false)
-                setLogedUser(null)
+                setUserUID(null)
+                // setLogedUser(null)
                 navigate('/')
             }).catch((err) => {
                 console.log(err);

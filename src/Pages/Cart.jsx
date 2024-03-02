@@ -1,11 +1,48 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App'
 import bin from '../icon/bin.png'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../firebase'
 
 const Cart = () => {
 
     const [noRecord, setNoRecord] = useState(false)
-    const { cart, setCart } = useContext(authData)
+    // const { cart, setCart } = useContext(authData)
+    const { cart, setCart, userUID } = useContext(authData);
+
+    useEffect(()=>{
+        if(cart.length === 0){
+            setNoRecord(true)
+        }else{
+            setNoRecord(false)
+        }
+    }, [cart])
+
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                if (userUID) {
+                    const userCartRef = doc(db, 'carts', userUID);
+                    const cartDoc = await getDoc(userCartRef);
+
+                    if (cartDoc.exists()) {
+                        // If the document exists, update the cart state
+                        setCart(cartDoc.data().cart || []);
+                    } else {
+                        // If the document doesn't exist, set cart state to an empty array
+                        setCart([]);
+                    }
+                } else {
+                    // If userUID is not available, set cart state to an empty array
+                    setCart([]);
+                }
+            } catch (error) {
+                console.error('Error fetching cart data:', error);
+            }
+        };
+
+        fetchCartData();
+    }, [userUID, setCart]);
 
     const handleDecrement = () => {
 
