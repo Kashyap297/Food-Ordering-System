@@ -4,14 +4,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup } from 'firebase/auth';
-import { app } from '../firebase';
+import { app, db } from '../firebase';
 import Swal from 'sweetalert2'
+import { addDoc, collection } from 'firebase/firestore';
 
 const Signup = () => {
 
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app)
     const { login, setLogin } = useContext(authData)
+    const { userUID, setUserUID } = useContext(authData)
 
     // const { users, setUsers } = useContext(authData)
     const [input, setInput] = useState({ email: '', password: '' })
@@ -65,6 +67,9 @@ const Signup = () => {
         createUserWithEmailAndPassword(auth, input.email, input.password)
             .then((userCredential) => {
                 const user = userCredential.user;
+                const uid = user.uid;
+                setUserUID(uid);
+
                 Swal.fire({
                     title: "Login Successfully !",
                     text: "Visit our home page...",
@@ -72,6 +77,11 @@ const Signup = () => {
                     showConfirmButton: false,
                     timer: 1700
                 });
+                // const email = user.email
+                // const uid = user.uid
+                // const userRef = collection(db, 'users');
+                // addDoc(userRef, { email, uid });
+
                 setLogin(true)
                 navigate('/')
             })
