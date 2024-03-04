@@ -12,3 +12,9 @@ code {
     monospace;
 }
 
+.banner-img img{
+  width: 100%;
+}
+.banner-img{
+  padding: 1rem;
+}
