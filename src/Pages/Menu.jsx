@@ -54,7 +54,7 @@ const Menu = () => {
     const fetchData = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "Food"));
-        const allDishes = querySnapshot.docs.map((doc) => doc.data());
+        const allDishes = querySnapshot.docs.map((doc) => {return {unique:doc.id,...doc.data()}});
         setOriginalDishes(allDishes);
 
         let filteredDishes = allDishes;
