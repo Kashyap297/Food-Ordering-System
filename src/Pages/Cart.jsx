@@ -3,12 +3,18 @@ import { authData } from '../App'
 import bin from '../icon/bin.png'
 import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
+
 
 const Cart = () => {
 
     const [noRecord, setNoRecord] = useState(false)
     const { cart, setCart, userUID } = useContext(authData);
     const [totalAmount, setTotalAmount] = useState(0)
+    const { login, setLogin } = useContext(authData)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (cart.length === 0) {
@@ -48,7 +54,7 @@ const Cart = () => {
         try {
             if (userUID) {
                 const userCartRef = doc(db, 'carts', userUID);
-    
+
                 const currentQuantity = cart[productId].quantity;
                 if (currentQuantity > 1) {
                     await updateDoc(userCartRef, {
@@ -57,7 +63,7 @@ const Cart = () => {
 
                     const updatedCart = [...cart];
                     updatedCart[productId].quantity -= 1;
-    
+
                     setCart(updatedCart);
                 }
             }
@@ -97,6 +103,28 @@ const Cart = () => {
             }
         } catch (error) {
             console.error('Error deleting product from cart:', error);
+        }
+    }
+
+    const handleOrder = () => {
+        if (login) {
+            Swal.fire({
+                title: "Ordered Placed Successfully !",
+                text: "Grab More Food....",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1700
+            });
+            navigate('/menu')
+        }else{
+            Swal.fire({
+                title: "Please Login !",
+                text: "Login To Add to Platter",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 2100
+              });
+              navigate('/login')
         }
     }
 
@@ -183,6 +211,11 @@ const Cart = () => {
                                 <div className="d-flex justify-content-between align-items-center mt-3 px-3 border-bottom pb-3">
                                     <span className='fs-5 fw-bold clr-gr'>Grand Total</span>
                                     <span className='fs-4 fw-bold'>{totalAmount}/- </span>
+                                </div>
+                                <div className="place-btn">
+                                    <button className="btn btn-outline-dark w-100" onClick={handleOrder}>
+                                        Place Order
+                                    </button>
                                 </div>
                             </div>
                         </div>

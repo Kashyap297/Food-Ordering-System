@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 
