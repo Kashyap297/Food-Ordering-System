@@ -134,7 +134,7 @@ const Cart = () => {
                 <h1 className='text-center title mb-3'>Culinary Cart</h1>
                 <div className="cart mt-5 mx-5">
                     <div className="row">
-                        <div className="col-8">
+                        <div className="col-lg-8 col-12">
                             <div className="cart-area bg-theme p-5 border-rad-header">
                                 <table className='table table-hover mb-0 table-rounded table-bordered p-3 text-center align-middle'>
                                     <thead className='table-light'>
@@ -194,7 +194,7 @@ const Cart = () => {
                                 </table>
                             </div>
                         </div>
-                        <div className="col-4">
+                        <div className="col-lg-4 col-12">
                             <div className="cart-billing bg-theme px-5 py-4 border-rad-header">
                                 <h3 className='text-center border-bottom pb-2  m-0 clr-gr title'>Order-Summary </h3>
                                 <p className='text-secondary text-end mt-3'>({cart.length} {cart.length === 1 ? 'product' : 'products'})</p>
