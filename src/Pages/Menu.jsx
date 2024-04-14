@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authData } from '../App';
 import { db } from '../firebase';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ const Menu = () => {
     const fetchData = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "Food"));
-        const allDishes = querySnapshot.docs.map((doc) => doc.data());
+        const allDishes = querySnapshot.docs.map((doc) => {return {unique:doc.id,...doc.data()}});
         setOriginalDishes(allDishes);
 
         let filteredDishes = allDishes;
@@ -82,30 +82,35 @@ const Menu = () => {
     };
 
     fetchData()
-  }, [searchDish, setDishes, selectedType, sortByPrice, setCart])
+  }, [searchDish, setDishes, selectedType, sortByPrice])
 
 
   const handleAddToCart = async (selectedDish) => {
     console.log(selectedDish);
     if (login) {
       // If user is logged in, update the cart
-      const newCart = [...cart];
+      try {
+        console.log(selectedDish.unique);
 
-      console.log(selectedDish.unique);
-      const existingItemIndex = newCart.findIndex((item) => item.id === selectedDish.unique);
-      console.log(existingItemIndex);
+        const newCart = [...cart];
 
-      if (existingItemIndex !== -1) {
-        // If the item already exists in the cart, update its quantity
-        newCart[existingItemIndex].quantity += 1;
-      } else {
-        // If the item is not in the cart, add a new item
-        newCart.push({ ...selectedDish, quantity: 1 });
+        const existingItemIndex = newCart.findIndex((item) => item.unique === selectedDish.unique);
+        console.log(existingItemIndex);
+
+        if (existingItemIndex !== -1) {
+          // If the item already exists in the cart, update its quantity
+          newCart[existingItemIndex].quantity += 1;
+        } else {
+          // If the item is not in the cart, add a new item
+          newCart.push({ ...selectedDish, quantity: 1 });
+        }
+
+        const userCartRef = doc(db, 'carts', userUID);
+        await setDoc(userCartRef, { cart: newCart }, { merge: true });
+        setCart(newCart)
+      } catch (error) {
+        console.error('error Updating cart : ', error)
       }
-
-      const userCartRef = doc(db, 'carts', userUID);
-      await setDoc(userCartRef, { cart: newCart }, { merge: true });
-      setCart(newCart)
 
     } else {
       Swal.fire({
@@ -117,8 +122,52 @@ const Menu = () => {
       });
       navigate('/login')
     }
-
   };
+
+  // const handleAddToCart = async (selectedDish) => {
+  //   if (login) {
+  //     // Check if the user has a cart in the database
+  //     const userCartRef = doc(db, 'carts', userUID);
+  //     const userCartDoc = await getDoc(userCartRef);
+
+  //     if (userCartDoc.exists()) {
+  //       // User already has a cart, update the existing cart
+  //       const existingCart = userCartDoc.data().cart || [];
+
+  //       // Check if the selected dish already exists in the cart
+  //       const existingItemIndex = existingCart.findIndex(item => item.unique === selectedDish.unique);
+
+  //       if (existingItemIndex !== -1) {
+  //         // If the item exists, create a new item with a unique identifier
+  //         const newItem = { ...selectedDish, unique: Date.now(), quantity: 1 };
+  //         existingCart.push(newItem);
+  //       } else {
+  //         // If the item is not in the cart, add a new item
+  //         existingCart.push({ ...selectedDish, quantity: 1 });
+  //       }
+
+  //       // Update the cart in the database
+  //       await updateDoc(userCartRef, { cart: existingCart });
+  //       setCart(existingCart); // Update the local state
+  //     } else {
+  //       // User does not have a cart, create a new one
+  //       const newCart = [{ ...selectedDish, quantity: 1 }];
+  //       await setDoc(userCartRef, { cart: newCart });
+  //       setCart(newCart); // Update the local state
+  //     }
+  //   } else {
+  //     // Handle the case when the user is not logged in
+  //     Swal.fire({
+  //       title: "Please Login !",
+  //       text: "Login To Add to Platter",
+  //       icon: "info",
+  //       showConfirmButton: false,
+  //       timer: 2100
+  //     });
+  //     navigate('/login');
+  //   }
+  // };
+
   return (
     <>
       <section className='menu-section my-4 py-5 bg-white mx-4 border-rad-parent'>

@@ -105,6 +105,13 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1700
                 });
+                const email = result.user.email
+                const uid = result.user.uid
+                console.log(email, uid);
+                // i want to store this 2 data in firestore firebase users
+                const userRef = collection(db, 'users');
+                addDoc(userRef, { email, uid });
+
                 setLogin(true)
                 navigate('/')
             }).catch((error) => {
