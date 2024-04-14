@@ -124,10 +124,10 @@ const Menu = () => {
       <section className='menu-section my-4 py-5 bg-white mx-4 border-rad-parent'>
         <h1 className='text-center title mb-3'>Explore Menu</h1>
         <div className="filter-area bg-theme py-2 px-5">
-          <div className="d-flex align-items-center justify-content-between">
+          <div className="d-block d-md-flex flex-wrap align-items-center justify-content-between">
             <input type="text" className='form-control w-25' placeholder='Search Dish...' value={searchDish} onChange={handleSearch} />
-            <div className="sortbyname">
-              <div className="d-flex align-items-center justify-content-Evenly gap-2">
+            <div className="sortbyname mt-2 mt-lg-0">
+              <div className="d-flex align-items-center flex-wrap justify-content-Evenly gap-2">
                 <button className={`btn btn-outline-danger ${selectedType === 'All' ? 'active' : ''}`} onClick={() => handleFilterByType('All')}>
                   All
                 </button>
@@ -161,7 +161,7 @@ const Menu = () => {
               dishes.map((dish, index) => {
                 return (
                   noRecord ? <h1 key={index}>No Data</h1> :
-                    <div className="col-3 my-2" key={index}>
+                    <div className="col-12 col-md-6 col-lg-4 col-xl-3 my-2 " key={index}>
                       <div className="card-menu bg-theme border-rad-parent p-3">
                         <div className="card-img border-rad-parent">
                           <img src={dish.img} alt="" className='img-fluid border-rad-parent' />

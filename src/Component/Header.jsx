@@ -35,7 +35,7 @@ const Header = () => {
         <>
             <div className="header mx-4 mt-3">
                 <div className="bg-white border px-3 py-3 border-rad-header ">
-                    <div className="f-fam-barlow d-flex align-items-center justify-content-between">
+                    <div className="f-fam-barlow d-flex d-md-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center justify-content-md-between">
                         <div className="logo">
                             <h1 className='m-0'>BurgerKing</h1>
                         </div>
@@ -44,7 +44,7 @@ const Header = () => {
                             <li><Link to={"/menu"} className='fw-bold text-secondary'>Menu</Link></li>
                             <li><Link to={"/cart"} className='fw-bold text-secondary'>Cart</Link></li>
                         </ul>
-                        <div className="users">
+                        <div className="users align-self-center">
                             {
                                 !login ? <>
                                     <Link to={"/login"} className='btn btn-outline-danger me-3 px-3 py-2 fw-bolder'>Login</Link>
