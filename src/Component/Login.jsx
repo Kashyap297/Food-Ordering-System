@@ -125,7 +125,7 @@ const Login = () => {
             <div className="login ">
                 <div className="container m-auto">
                     <div className="d-flex align-items-center justify-content-center vh-80">
-                        <div className="col-4">
+                        <div className="col-12 col-md-4">
                             <form action="" className='shadow-lg bor-rad p-4 bg-light' onSubmit={handleLogIn}>
                                 <h1 className='text-center text-secondary'>Log-In</h1>
                                 <div className="d-flex justify-content-between align-items-center">
