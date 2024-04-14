@@ -136,7 +136,7 @@ const Cart = () => {
                     <div className="row">
                         <div className="col-lg-8 col-12">
                             <div className="cart-area bg-theme p-5 border-rad-header">
-                                <table className='table table-hover mb-0 table-rounded table-bordered p-3 text-center align-middle'>
+                                <table className='table table-hover mb-0 table-rounded table-responsive table-bordered p-3 text-center align-middle'>
                                     <thead className='table-light'>
                                         <tr>
                                             <th className='text-dark col-5'>Items</th>
