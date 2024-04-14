@@ -116,15 +116,15 @@ const Cart = () => {
                 timer: 1700
             });
             navigate('/menu')
-        }else{
+        } else {
             Swal.fire({
                 title: "Please Login !",
                 text: "Login To Add to Platter",
                 icon: "info",
                 showConfirmButton: false,
                 timer: 2100
-              });
-              navigate('/login')
+            });
+            navigate('/login')
         }
     }
 
@@ -136,62 +136,64 @@ const Cart = () => {
                     <div className="row">
                         <div className="col-lg-8 col-12">
                             <div className="cart-area bg-theme p-5 border-rad-header">
-                                <table className='table table-hover mb-0 table-rounded table-responsive table-bordered p-3 text-center align-middle'>
-                                    <thead className='table-light'>
-                                        <tr>
-                                            <th className='text-dark col-5'>Items</th>
-                                            <th className='text-dark col'>Price</th>
-                                            <th className='text-dark col'>Qty</th>
-                                            <th className='text-dark col'>Sub-Total</th>
-                                            <th className='text-dark col'>Bin</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className='table-group-divider'>
-                                        {
-                                            noRecord ? (
-                                                <>
-                                                    <tr>
-                                                        <td className='text-center fw-bold pe-0 py-3 fs-4 text-danger' colSpan={5}>
-                                                            cart is feeling a bit lonely</td>
+                                <div class="table-responsive">
+                                    <table className='table table-hover mb-0 table-rounded table-bordered p-3 text-center align-middle'>
+                                        <thead className='table-light'>
+                                            <tr>
+                                                <th className='text-dark col-5'>Items</th>
+                                                <th className='text-dark col'>Price</th>
+                                                <th className='text-dark col'>Qty</th>
+                                                <th className='text-dark col'>Sub-Total</th>
+                                                <th className='text-dark col'>Bin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className='table-group-divider'>
+                                            {
+                                                noRecord ? (
+                                                    <>
+                                                        <tr>
+                                                            <td className='text-center fw-bold pe-0 py-3 fs-4 text-danger' colSpan={5}>
+                                                                cart is feeling a bit lonely</td>
 
-                                                    </tr>
-                                                </>
-                                            ) : (
-
-                                                cart.map((item, index) => {
-                                                    // console.log(item);
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td className='d-flex justify-content-between align-items-center py-3'>
-                                                                <div className="pro-img me-3">
-                                                                    <img src={item.img} alt="" className='image-fluid bor-rad' />
-                                                                </div>
-                                                                <div className="title-cart">
-                                                                    <h6 className='text-start fw-bold mb-0 clr-gr'>{item.name}</h6>
-                                                                    <p className='font-sz mb-2 text-justify'>{item.description}</p>
-                                                                </div>
-                                                            </td>
-                                                            <td className=''>{item.price}/-</td>
-                                                            <td className=''>
-                                                                <div className="quantity-field" >
-                                                                    <button className="value-button decrease-button" onClick={() => handleDecrement(index)}>-</button>
-                                                                    <div className="number">{item.quantity}</div>
-                                                                    <button className="value-button increase-button" onClick={() => handleIncrement(index)}>+</button>
-                                                                </div>
-                                                            </td>
-                                                            <td className=''>{item.quantity * item.price}/-</td>
-                                                            <td className=''>
-                                                                <button className="btn btn-light" onClick={() => handleDelete(index)}>
-                                                                    <img src={bin} alt="" width="24px" />
-                                                                </button></td>
                                                         </tr>
-                                                    )
-                                                })
-                                            )
-                                        }
+                                                    </>
+                                                ) : (
 
-                                    </tbody>
-                                </table>
+                                                    cart.map((item, index) => {
+                                                        // console.log(item);
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td className='d-flex justify-content-between align-items-center py-3'>
+                                                                    <div className="pro-img me-3">
+                                                                        <img src={item.img} alt="" className='image-fluid bor-rad' />
+                                                                    </div>
+                                                                    <div className="title-cart">
+                                                                        <h6 className='text-start fw-bold mb-0 clr-gr'>{item.name}</h6>
+                                                                        <p className='font-sz mb-2 text-justify'>{item.description}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td className=''>{item.price}/-</td>
+                                                                <td className=''>
+                                                                    <div className="quantity-field" >
+                                                                        <button className="value-button decrease-button" onClick={() => handleDecrement(index)}>-</button>
+                                                                        <div className="number">{item.quantity}</div>
+                                                                        <button className="value-button increase-button" onClick={() => handleIncrement(index)}>+</button>
+                                                                    </div>
+                                                                </td>
+                                                                <td className=''>{item.quantity * item.price}/-</td>
+                                                                <td className=''>
+                                                                    <button className="btn btn-light" onClick={() => handleDelete(index)}>
+                                                                        <img src={bin} alt="" width="24px" />
+                                                                    </button></td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                )
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div className="col-lg-4 col-12">
